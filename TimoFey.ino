@@ -19,11 +19,30 @@
 #include <LiquidCrystal_I2C.h> //This library you can add via Include Library > Manage Library > 
   
   LiquidCrystal_I2C lcd(0x27,16,2); // Check I2C address of LCD, normally 0x27 or 0x3F
+
+
+byte bukva_B[8]   = {B11110,B10000,B10000,B11110,B10001,B10001,B11110,B00000,}; // Буква "Б"
+byte bukva_G[8]   = {B11111,B10001,B10000,B10000,B10000,B10000,B10000,B00000,}; // Буква "Г"
+byte bukva_D[8]   = {B01111,B00101,B00101,B01001,B10001,B11111,B10001,B00000,}; // Буква "Д"
+byte bukva_ZH[8]  = {B10101,B10101,B10101,B11111,B10101,B10101,B10101,B00000,}; // Буква "Ж"
+byte bukva_Z[8]   = {B01110,B10001,B00001,B00010,B00001,B10001,B01110,B00000,}; // Буква "З"
+byte bukva_I[8]   = {B10001,B10011,B10011,B10101,B11001,B11001,B10001,B00000,}; // Буква "И"
+byte bukva_IY[8]  = {B01110,B00000,B10001,B10011,B10101,B11001,B10001,B00000,}; // Буква "Й"
+byte bukva_L[8]   = {B00011,B00111,B00101,B00101,B01101,B01001,B11001,B00000,}; // Буква "Л"
+byte bukva_P[8]   = {B11111,B10001,B10001,B10001,B10001,B10001,B10001,B00000,}; // Буква "П"
+byte bukva_Y[8]   = {B10001,B10001,B10001,B01010,B00100,B01000,B10000,B00000,}; // Буква "У"
+byte bukva_F[8]   = {B00100,B11111,B10101,B10101,B11111,B00100,B00100,B00000,}; // Буква "Ф"
+byte bukva_TS[8]  = {B10010,B10010,B10010,B10010,B10010,B10010,B11111,B00001,}; // Буква "Ц"
+byte bukva_CH[8]  = {B10001,B10001,B10001,B01111,B00001,B00001,B00001,B00000,}; // Буква "Ч"
+byte bukva_Sh[8]  = {B10101,B10101,B10101,B10101,B10101,B10101,B11111,B00000,}; // Буква "Ш"
+byte bukva_Shch[8]= {B10101,B10101,B10101,B10101,B10101,B10101,B11111,B00001,}; // Буква "Щ"
+byte bukva_Mz[8]  = {B10000,B10000,B10000,B11110,B10001,B10001,B11110,B00000,}; // Буква "Ь"
+byte bukva_IYI[8] = {B10001,B10001,B10001,B11001,B10101,B10101,B11001,B00000,}; // Буква "Ы"
+byte bukva_Yu[8]  = {B10010,B10101,B10101,B11101,B10101,B10101,B10010,B00000,}; // Буква "Ю"
+byte bukva_Ya[8]  = {B01111,B10001,B10001,B01111,B00101,B01001,B10001,B00000,}; // Буква "Я"
+
+
   
- uint8_t heart[8] = {0x0,0xa,0x1f,0x1f,0xe,0x4,0x0};  // example sprite bitmap
-
-
-
 // MQTT
 #include <PubSubClient.h>
 #include <MQTT.h>
@@ -87,7 +106,7 @@ int FreeHeap=0;
 int port = 80;
 
 
-bool flag1 = false;        // Флаг что импульс посчитан
+bool flag = false;        // Флаг что импульс посчитан
 long Summ1 = 0;            // Количество импульсов
 int pinIn = 0;           // Порт импульсного входа gpio0
 int ad = 200;           // Время для проверки антидребезга в мс
@@ -110,8 +129,7 @@ void setup() {
     Serial.begin(115200);
     lcd.begin(4,5);      // In ESP8266-01, SDA=0, SCL=2               
     lcd.backlight();
-    lcd.createChar(1, heart);
-
+    
     
   pinMode (pinrele, OUTPUT);
   pinMode (pinled, OUTPUT);
@@ -167,58 +185,17 @@ void setup() {
 
   initMQTT();
   Serial.println("Step 8 MQTT");
+  
+  filtr();
+  Led();      //Функция отрисовки экрана
 
 }
 
 void loop() {
    
-   filtrP = 100-(100*Summ1 / filtrV.toInt());
-  
-    
-
   FreeHeap = ESP.getFreeHeap();
-      
-  filtrVreal = Summ1;
   HTTP.handleClient();
-  delay(1);
-
-    if ((digitalRead(pinIn)== LOW )&&( flag1 ==false))  
-  {
-    flag1=true;
-    Summ1=Summ1+vodomerIn.toInt();  
-
-    Serial.printf("filtrP  %u\n", filtrP);
-    if (filtrV.toInt()<Summ1) allarm(filtrV, String(Summ1));
-    else 
-    {
-    Status = "Ok";
-//    publishMQTT(pubTopic+mqttUser+"/Status", Status);
-    }
-    
-    millis_ad1 = millis();
-
-    Serial.printf("port LOW, Summ =  %u\n", Summ1);
-    saveConfigSetup();
-    publishMQTT(pubTopic+mqttUser+"/filtrVreal", filtrVreal);
-    publishMQTT(pubTopic+mqttUser+"/filtrP", String(filtrP));
-
-
-       lcd.home();                // At column=0, row=0
-   lcd.print("OCTATOK: "+String(filtrP)+"%            ");   
-   lcd.setCursor(0, 1);
-   if (filtrP<1) 
-     {
-      lcd.print("3AMEHNTE filtr");
-     }
-    else 
-    {
-     for (int i=0; i <= filtrP/6.25; i++){
-      lcd.print(char(255));
-     }
-      lcd.print("                          ");
-    }
-  }
- 
-  if ((digitalRead(pinIn)== HIGH )&&(flag1==true)&&(ad < millis()- millis_ad1))   flag1=false;
+//  delay(1);
+  filtr();
   
 }

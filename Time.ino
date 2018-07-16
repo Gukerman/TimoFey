@@ -53,17 +53,3 @@ String GetDate() {
  Data.replace(Time, ""); // Удаляем из строки 8 символов времени и пробел
  return Data; // Возврашаем полученную дату
 }
-
-void allarm(String filtrV, String Summ1)
-{
-  Serial.println("Allarm");
-  Serial.print("filtrV = ");
-  Serial.println(filtrV);
-  Serial.print("Summ1 = ");
-  Serial.println(Summ1);
-  Status = "Allarm";
-//  publishMQTT(pubTopic+mqttUser+"/Status", Status);
-
-}
-
-
