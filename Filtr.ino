@@ -23,8 +23,7 @@ void filtr(void) {
     publishMQTT(pubTopic+mqttUser+"/filtrVreal", filtrVreal);
     publishMQTT(pubTopic+mqttUser+"/filtrP", String(filtrP));
 
-
-
+    Serial.println("GetDate - "+GetDate());
   }
  
   if ((digitalRead(pinIn)== HIGH )&&(flag==true)&&(ad < millis()- millis_ad1))   flag=false;
