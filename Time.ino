@@ -46,10 +46,14 @@ String GetTime() {
 // Получение даты
 String GetDate() {
  time_t now = time(nullptr); // получаем время с помощью библиотеки time.h
+ Serial.print("now -");
+  Serial.print(now);
  String Data = ""; // Строка для результатов времени
  Data += ctime(&now); // Преобразуем время в строку формата Thu Jan 19 00:55:35 2017
  int i = Data.lastIndexOf(" "); //Ишем позицию последнего символа пробел
  String Time = Data.substring(i - 8, i+1); // Выделяем время и пробел
  Data.replace(Time, ""); // Удаляем из строки 8 символов времени и пробел
  return Data; // Возврашаем полученную дату
+ Serial.println("now -"+now);
+
 }

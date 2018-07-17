@@ -72,12 +72,12 @@ String _passwordAP = ""; // пароль точки доступа
 String SSDP_Name = ""; // Имя SSDP
 int timezone = 5;               // часовой пояс GTM
 
-String filtrV = "";       // код геркона отрыт 2866734
-String filtrT = "";       // код геркона закрыт 2866727
-String filtrTdata = "";       // код геркона закрыт 2866727
-String filtrVreal = "";       // код геркона закрыт 2866727
-String vodomerIn = "";       // код геркона батарейка  2866731
-String vodomerOut = "";       // код геркона авария 2866731
+String filtrV = "1";       // Ресурс фильтра в литрах
+String filtrT = "1";       // Ресурс фильтра в днях 
+String filtrTdata = "01.01.3000";       // Дата установки дд.мм.гггг
+String filtrVreal = "1";       // Использовано литров 
+String vodomerIn = "1";       // Коэффициент литров/импульс вход 
+String vodomerOut = "1";       // Коэффициент литров/импульс слив 
 
 String Status = "Ok";
   

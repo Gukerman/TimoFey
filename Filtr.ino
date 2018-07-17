@@ -23,7 +23,8 @@ void filtr(void) {
     publishMQTT(pubTopic+mqttUser+"/filtrVreal", filtrVreal);
     publishMQTT(pubTopic+mqttUser+"/filtrP", String(filtrP));
 
-    Serial.println("GetDate - "+GetDate());
+Serial.println("GetDate - "+GetDate());
+
   }
  
   if ((digitalRead(pinIn)== HIGH )&&(flag==true)&&(ad < millis()- millis_ad1))   flag=false;
@@ -50,7 +51,7 @@ void Led(void) {
      for (int i=0; i <= filtrP/6.25; i++){
       lcd.print(char(255));
      }
-      lcd.print("                          ");
+      lcd.print("               ");
     }
     
 }
