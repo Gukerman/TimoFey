@@ -1,7 +1,9 @@
 void initSSDP(void) {
   // SSDP дескриптор
+    if (WiFi.status() == WL_CONNECTED) {     
+  
   HTTP.on("/description.xml", HTTP_GET, []() {
-    SSDP.schema(HTTP.client());
+  SSDP.schema(HTTP.client());
   });
   //Если версия  2.0.0 закаментируйте следующую строчку
   SSDP.setDeviceType("upnp:rootdevice");
@@ -16,4 +18,5 @@ void initSSDP(void) {
   SSDP.setManufacturer("Guk");
   SSDP.setManufacturerURL("http://www.Ufanet.ru");
   SSDP.begin();
+  }
 }

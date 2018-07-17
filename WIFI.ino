@@ -50,13 +50,16 @@ boolean wifiConnect(byte tries, byte pin) {
   if ((pin > 5 && pin < 12) || pin > 16) pin = 0 ;
   if (pin != 0)   pinMode(pin, OUTPUT);
    
-  while (--tries && WiFi.status() != WL_CONNECTED)
+  while (tries && WiFi.status() != WL_CONNECTED)
   {
     //Мигаем сетодиодом при попытке подключится к роутеру
-    if (pin != 0)   digitalWrite(pin, HIGH);
-    delay(500);
-    if (pin != 0)  digitalWrite(pin, LOW);
-    delay(500);
+    
+    if (500 < millis()- millis_wifi) 
+    {
+      --tries;
+      millis_wifi=millis();
+      if (pin != 0)   digitalWrite(pin, !digitalRead(pin));
+    }
       
     Serial.print(".");
     
@@ -65,7 +68,8 @@ boolean wifiConnect(byte tries, byte pin) {
     lcd.print("WiFi connect");   
     lcd.setCursor(0, 1);
     lcd.print(tries);   
-      
+    filtr();      
+    
   }
   if (WiFi.status() == WL_CONNECTED)return true;
   return false;

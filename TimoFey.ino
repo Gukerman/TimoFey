@@ -111,6 +111,7 @@ long Summ1 = 0;            // Количество импульсов
 int pinIn = 0;           // Порт импульсного входа gpio0
 int ad = 200;           // Время для проверки антидребезга в мс
 long millis_ad1 = 0;     // переменная для хранения millis() проверки антидребезга
+long millis_wifi = 0;     // переменная для хранения millis() wifi подключения
 
 String pr="";
 
@@ -125,11 +126,15 @@ int pinled = 2;
  
 void setup() {
 
-
     Serial.begin(115200);
+
     lcd.begin(4,5);      // In ESP8266-01, SDA=0, SCL=2               
     lcd.backlight();
-    
+    lcd.clear();
+    lcd.createChar(0, bukva_I);  // создаем символы и записываем их в память LCD
+    lcd.createChar(1, bukva_F);  
+    lcd.createChar(2, bukva_L);
+    lcd.createChar(3, bukva_Mz);    
     
   pinMode (pinrele, OUTPUT);
   pinMode (pinled, OUTPUT);
@@ -195,7 +200,7 @@ void loop() {
    
   FreeHeap = ESP.getFreeHeap();
   HTTP.handleClient();
-//  delay(1);
+  delay(1);
   filtr();
   
 }

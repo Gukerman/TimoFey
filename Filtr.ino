@@ -19,6 +19,7 @@ void filtr(void) {
 
     Serial.printf("port LOW, Summ =  %u\n", Summ1);
     saveConfigSetup();
+   
     publishMQTT(pubTopic+mqttUser+"/filtrVreal", filtrVreal);
     publishMQTT(pubTopic+mqttUser+"/filtrP", String(filtrP));
 
@@ -40,15 +41,6 @@ void Led(void) {
    lcd.setCursor(0, 1);
    if (filtrP<1) 
      {
-
-//    lcd.clear();
-  lcd.createChar(0, bukva_I);  // создаем символы и записываем их в память LCD
-  lcd.createChar(1, bukva_F);  
-  lcd.createChar(2, bukva_L);
-  lcd.createChar(3, bukva_Mz);
-  
-//lcd.home();  
-
    lcd.setCursor(0, 1);
 
       lcd.print("3AMEH");lcd.write(0);      lcd.print("TE ");
