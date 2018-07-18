@@ -2,6 +2,7 @@
 
 
 */
+//#include <TimeLib.h>
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h> 
 
@@ -80,6 +81,13 @@ String vodomerIn = "1";       // Коэффициент литров/импул�
 String vodomerOut = "1";       // Коэффициент литров/импульс слив 
 
 String Status = "Ok";
+
+long Year_i = 2018;
+long Month_i = 01;
+long Day_i = 01;
+long now_i = 01;
+int ost_i = 0;
+
   
 String  mqttServer = "";   // 77.79.191.226
 String  mqttPort =  "";     // 

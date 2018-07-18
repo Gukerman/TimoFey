@@ -69,7 +69,14 @@ void handle_Set_filtr()
   Serial.print("filtrVreal - "); Serial.println(filtrVreal); 
   Serial.print("filtrTdata - "); Serial.println(filtrTdata); 
   Summ1 = filtrVreal.toInt();
+  
+  Year_i = filtrTdata.substring(6, 10).toInt(); // Выделяем год
+  Month_i = filtrTdata.substring(3, 5).toInt(); // Выделяем месяц
+  Day_i = filtrTdata.substring(0, 2).toInt(); // Выделяем день
+  
+  handle_Time();
   handleMQTT();   
+  
 }
 
 void handle_ConfigJSON() {

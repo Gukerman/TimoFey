@@ -44,16 +44,22 @@ bool loadConfig() {
     filtrTdata = root["filtrTdata"].as<String>();
     vodomerIn = root["vodomerIn"].as<String>();
     vodomerOut = root["vodomerOut"].as<String>();  
+    
+    Year_i = filtrTdata.substring(6, 10).toInt(); // Выделяем год
+    Month_i = filtrTdata.substring(3, 5).toInt(); // Выделяем месяц
+    Day_i = filtrTdata.substring(0, 2).toInt(); // Выделяем день
+  
     return true;
     
 }
 
 // Запись данных в файл config.json
 bool saveConfigSetup() {
-    
+
+/*
     Serial.print("saveConfigSetup FreeHeap - " );
     Serial.print(FreeHeap);
-
+*/
     
   // Резервируем память для json обекта буфер может рости по мере необходимти предпочтительно для ESP8266 
   DynamicJsonBuffer jsonBuffer;
@@ -91,10 +97,12 @@ bool saveConfigSetup() {
   // Записываем строку json в файл 
   json.printTo(configFile);
   configFile.close();
-
+  
+/*
     Serial.print("               FreeHeap - " );
     Serial.println(FreeHeap);
-    
+*/
+
   return true;
   }
 

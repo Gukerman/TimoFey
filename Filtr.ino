@@ -4,6 +4,7 @@ void filtr(void) {
 
   if ((digitalRead(pinIn)== LOW )&&( flag ==false))  
   {
+ 
     flag=true;
     Summ1=Summ1+vodomerIn.toInt();  
 
@@ -17,16 +18,37 @@ void filtr(void) {
     
     millis_ad1 = millis();
 
-    Serial.printf("port LOW, Summ =  %u\n", Summ1);
+//    Serial.printf("port LOW, Summ =  %u\n", Summ1);
     saveConfigSetup();
    
     publishMQTT(pubTopic+mqttUser+"/filtrVreal", filtrVreal);
     publishMQTT(pubTopic+mqttUser+"/filtrP", String(filtrP));
-
-Serial.println("GetDate - "+GetDate());
-
-  }
  
+if (Month_i <= 2) { --Year_i;  Month_i = Month_i + 12; }
+
+long tt = (365*Year_i + Year_i/4 - Year_i/100 + Year_i/400 + 3*(Month_i+1)/5 + 30*Month_i + Day_i - 719561) * 86400;  //+ 3600 * h + 60 * mi + s
+
+//  Serial.println(now_i);
+
+if (now_i>1525132800)
+{
+ost_i = filtrT.toInt() - ((now_i - tt)/24/60/60);
+
+if ( ost_i <= 0) allarm(filtrV, String(Summ1));
+
+/*  
+  Serial.println(ost_i);
+  Serial.print(" ");
+  Serial.print(Day_i);
+  Serial.print(".");
+  Serial.print(Month_i);
+  Serial.print(".");
+  Serial.print(Year_i);
+  Serial.println();
+*/
+  
+  }
+} 
   if ((digitalRead(pinIn)== HIGH )&&(flag==true)&&(ad < millis()- millis_ad1))   flag=false;
 
 }
@@ -37,7 +59,7 @@ void Led(void) {
     Serial.printf("filtrP  %u\n", filtrP);
     
    lcd.home();                // At column=0, row=0
-   lcd.print("OCTATOK: "+String(filtrP)+"%            ");   
+   lcd.print("OCTATOK: "+String(filtrP)+"%    ");   
    lcd.setCursor(0, 1);
    if (filtrP<1) 
      {
