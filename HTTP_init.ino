@@ -73,7 +73,10 @@ void handle_Set_filtr()
   Year_i = filtrTdata.substring(6, 10).toInt(); // Выделяем год
   Month_i = filtrTdata.substring(3, 5).toInt(); // Выделяем месяц
   Day_i = filtrTdata.substring(0, 2).toInt(); // Выделяем день
-  
+
+  filtr();
+  Led();      //Функция отрисовки экрана
+
   handle_Time();
   handleMQTT();   
   

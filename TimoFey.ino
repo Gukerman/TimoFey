@@ -2,7 +2,6 @@
 
 
 */
-//#include <TimeLib.h>
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h> 
 
@@ -18,9 +17,12 @@
 
 #include <Wire.h>  // This library is already built in to the Arduino IDE
 #include <LiquidCrystal_I2C.h> //This library you can add via Include Library > Manage Library > 
-  
-  LiquidCrystal_I2C lcd(0x27,16,2); // Check I2C address of LCD, normally 0x27 or 0x3F
 
+#include <ESP8266httpUpdate.h>
+#include <DNSServer.h>
+  
+
+LiquidCrystal_I2C lcd(0x27,16,2); // Check I2C address of LCD, normally 0x27 or 0x3F
 
 byte bukva_B[8]   = {B11110,B10000,B10000,B11110,B10001,B10001,B11110,B00000,}; // Буква "Б"
 byte bukva_G[8]   = {B11111,B10001,B10000,B10000,B10000,B10000,B10000,B00000,}; // Буква "Г"
@@ -55,6 +57,7 @@ char* mqtt_user = "User";
 char* mqtt_pass = "Pass";
 String mqtt_client = "ESP8266";
 String mult = "";        // переменная хронения предыдущего сообщания (убирает дубли публикации, но это не точно)
+String bin = "http://www.wk-ufa.ru/TimoFey.ino.bin";
   
 // Объект для обнавления с web страницы 
 ESP8266HTTPUpdateServer httpUpdater;
@@ -96,7 +99,7 @@ String  mqttPass =  "";     //
 
 String pubTopic = "SMARTHOUSE/";       //smart_house/<номер_договора>/<код_устройства>/<статус_устройства>​ . Например: smart_house/72357995ASU/Door1/OPEN
 String cTopic = "";       // состояние геркона для публикации, например OPEN
-String controlTopic = "/ESP8266/CONTROL/#";
+String controlTopic = "SMARTHOUSE/#";
 
 boolean secTest = true;
 //StringCommand sCmd;     // The demo StringCommand object
@@ -192,12 +195,9 @@ void setup() {
   //Настраиваем и запускаем HTTP интерфейс
   Serial.println("Step 6 WebServer");
   HTTP_init();
-  
-//  mySwitch.enableReceive(pin433);  // Receiver on pin #13
-  Serial.println("Step 7 RCSwitch");
-
+ 
+  Serial.println("Step 7 MQTT");
   initMQTT();
-  Serial.println("Step 8 MQTT");
   
   filtr();
   Led();      //Функция отрисовки экрана

@@ -11,13 +11,13 @@ void callback(const MQTT::Publish& sub) { //Есть запись в топик�
   Serial.print(" => ");
   Serial.println(sub.payload_string()); // Данные из топика
 
-  if  (sub.topic() == "/ESP8266/CONTROL/GPIO/2")  {
-    if  (sub.payload_string() == "ON")  {
-      digitalWrite(pinrele, LOW);
-    }
-    if  (sub.payload_string() == "OFF")  {
-      digitalWrite(pinrele, HIGH);
-    }
+  if  (sub.topic() == "/Update")  {
+
+      Serial.print("***************Update");
+
+ //   bin = sub.payload_string();
+    if (bin != "") webUpdate();
+      
   }
 
   // echo
@@ -41,13 +41,13 @@ void MQTT_Pablush() {
           {
             Serial.println("Connected to MQTT broker");
             client.subscribe(controlTopic);
+            Serial.println("subscribe "+controlTopic);
           } else {
             Serial.println("Will reset and try again...");
            // abort();
           }  
      }
   }
-}
 
 /*
   if ((mqttServer != "")) {
@@ -62,19 +62,20 @@ void MQTT_Pablush() {
           
           client.set_callback(callback);
           //client.subscribe(prefix);  // Для приема получения HELLOW и подтверждения связи
-          client.subscribe("/+/+/control"); // Подписываемся на топики control
-          //client.subscribe("/" + chipID + "/RELE_1"); // подписываемся по топик с данными для светодиода
+          client.subscribe("/+/+/Update"); // Подписываемся на топики Update
+          //client.subscribe("/" + chipID + "/Update"); // подписываемся по топик с данными для светодиода
  //         loadnWidgets();
  
  Serial.print("MQTT - ");
  Serial.println(mqttServer); 
         } else {
+          
         }
       }
     }
   }
-  */
-
+*/
+}
 
 void  handleMQTT() {
 
@@ -105,7 +106,7 @@ void  publishMQTT(String pubTopic, String cTopic)
   {
           //Публикуем ReceivedValue в топике
           if (client.publish(pubTopic,  cTopic)) {
-            Serial.print(" Publish ");
+            Serial.print(" Publish " + pubTopic + " - ");
             Serial.println(cTopic);
           }
           else {
@@ -131,4 +132,6 @@ void handle_Set_MQTT() {              //
   Serial.print("mqttUser - "); Serial.println(mqttUser); 
   Serial.print("mqttPass - "); Serial.println(mqttPass);   
 }
+
+
 

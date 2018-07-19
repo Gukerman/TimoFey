@@ -30,7 +30,6 @@ void FS_init(void) {
     if (!handleFileRead(HTTP.uri()))
       HTTP.send(404, "text/plain", "FileNotFound");
   });
-
 }
 // Здесь функции для работы с файловой системой
 String getContentType(String filename) {
@@ -137,5 +136,4 @@ void handleFileList() {
   output += "]";
   HTTP.send(200, "text/json", output);
 }
-
 

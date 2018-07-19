@@ -55,9 +55,7 @@ if ( ost_i <= 0) allarm(filtrV, String(Summ1));
 
 void Led(void) {
 
-
-    Serial.printf("filtrP  %u\n", filtrP);
-    
+   lcd.clear();
    lcd.home();                // At column=0, row=0
    lcd.print("OCTATOK: "+String(filtrP)+"%    ");   
    lcd.setCursor(0, 1);
@@ -70,10 +68,13 @@ void Led(void) {
      }
     else 
     {
-     for (int i=0; i <= filtrP/6.25; i++){
-      lcd.print(char(255));
-     }
-      lcd.print("               ");
+     for (int i=0; i <= 16; i++){
+      if (i <= filtrP/6.25) lcd.print(char(255));
+      else
+        {
+        lcd.print(" ");
+        }
+      }
     }
     
 }
